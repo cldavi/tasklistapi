@@ -36,4 +36,11 @@ public class Task {
     private LocalDateTime createdAt;
 
     private UUID userId;
+
+    private void setTitle(String title) throws Exception {
+        if (title.length() > 40) {
+            throw new Exception("O título tem limite de 40 caracteres");
+        }
+        this.title = title;
+    }
 }
