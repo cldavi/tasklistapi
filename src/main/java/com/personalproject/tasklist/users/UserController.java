@@ -20,7 +20,7 @@ public class UserController {
     private final UserRepository userRepository;
     
     @PostMapping("/")
-    public ResponseEntity create(@RequestBody User user) {
+    public ResponseEntity<String> create(@RequestBody User user) {
         var collectedUser = this.userRepository.findByUsername(user.getUsername());
         if (collectedUser != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Esse username já está em uso");
@@ -29,7 +29,7 @@ public class UserController {
         var encryptedPassword = BCrypt.withDefaults().hashToString(12, user.getPassword().toCharArray());
         user.setPassword(encryptedPassword);
 
-        var createdUser = this.userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        this.userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Usuário criado");
     }
 }
