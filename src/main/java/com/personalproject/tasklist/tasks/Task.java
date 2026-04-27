@@ -25,8 +25,13 @@ public class Task {
     @Column(length = 40)
     private String title;
 
+    @Column(nullable = false)
     private String description;
+
+    @Column(nullable = false)
     private LocalDateTime startedAt;
+
+    @Column(nullable = false)
     private LocalDateTime endedAt;
     
     @Enumerated(value = EnumType.STRING)
@@ -37,6 +42,7 @@ public class Task {
 
     private UUID userId;
 
+    @SuppressWarnings("unused")
     private void setTitle(String title) throws Exception {
         if (title.length() > 40) {
             throw new Exception("O título tem limite de 40 caracteres");
