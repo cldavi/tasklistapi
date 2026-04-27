@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,5 +75,17 @@ public class TaskController {
         var updatedTask = this.taskRepository.save(newTask);
         this.taskRepository.save(updatedTask);
         return ResponseEntity.status(HttpStatus.OK).body("Tarefa atualizada");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Integer id, HttpServletRequest request) {
+        var task = taskRepository.findById(id).orElse(null);
+        var userId = request.getAttribute("userId");
+        if (task.getUserId().equals(userId)) {
+            taskRepository.deleteById(task.getId());;
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Você não tem permissão para deletar esta tarefa");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Tarefa deletada");
     }
 }
